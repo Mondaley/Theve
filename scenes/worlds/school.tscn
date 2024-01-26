@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3qa0gshshnv5"]
+
+[ext_resource type="PackedScene" uid="uid://bmcvwnbjj1toi" path="res://scenes/entities/theve.tscn" id="1_u3gxe"]
+[ext_resource type="PackedScene" uid="uid://dvvryynm25v3k" path="res://scenes/objects/platform.tscn" id="2_pu8au"]
+
+[node name="school" type="Node2D"]
+
+[node name="theve" parent="." instance=ExtResource("1_u3gxe")]
+z_index = -1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(33, 33)
+
+[node name="platform" parent="." instance=ExtResource("2_pu8au")]
+position = Vector2(3, 0)
