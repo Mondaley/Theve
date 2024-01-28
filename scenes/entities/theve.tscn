@@ -1,12 +1,32 @@
-[gd_scene load_steps=14 format=3 uid="uid://bmcvwnbjj1toi"]
+[gd_scene load_steps=15 format=3 uid="uid://bmcvwnbjj1toi"]
 
 [ext_resource type="Script" path="res://scripts/entities/theve/theve.gd" id="1_3kav4"]
 [ext_resource type="Script" path="res://scripts/entities/theve/theve_animation.gd" id="2_6o3ds"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_mk76h"]
+lightmap_size_hint = Vector2i(7, 7)
 
 [sub_resource type="QuadMesh" id="QuadMesh_jtyf1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cf3vl"]
 size = Vector2(12, 3)
+
+[sub_resource type="Animation" id="Animation_qsbbw"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gfk:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, -15.125)]
+}
 
 [sub_resource type="Animation" id="Animation_mbr0f"]
 resource_name = "jump"
@@ -50,23 +70,6 @@ tracks/2/keys = {
 "values": [Vector2(0, -33), Vector2(0, -33)]
 }
 
-[sub_resource type="Animation" id="Animation_qsbbw"]
-resource_name = "idle"
-length = 0.1
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("gfk:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(0, -15.125)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0houl"]
 _data = {
 "idle": SubResource("Animation_qsbbw"),
@@ -101,7 +104,15 @@ graph_offset = Vector2(-81, -10)
 [node name="theve" type="CharacterBody2D"]
 z_index = 2
 collision_layer = 2
+collision_mask = 17
 script = ExtResource("1_3kav4")
+
+[node name="shadow" type="MeshInstance2D" parent="."]
+modulate = Color(0, 0, 0, 0.231373)
+texture_filter = 1
+position = Vector2(-2.84217e-14, -1.5)
+scale = Vector2(12, 3)
+mesh = SubResource("QuadMesh_mk76h")
 
 [node name="gfk" type="MeshInstance2D" parent="."]
 position = Vector2(0, -15.125)
@@ -111,7 +122,6 @@ mesh = SubResource("QuadMesh_jtyf1")
 [node name="hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_cf3vl")
-disabled = true
 
 [node name="Animation" type="Node2D" parent="."]
 script = ExtResource("2_6o3ds")

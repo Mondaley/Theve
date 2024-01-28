@@ -2,7 +2,7 @@ extends Node2D
 
 
 func _input(event):
-	if Input.is_action_just_pressed("jump") and owner.can_jump:
+	if Input.is_action_just_pressed("jump") and owner.can_jump and owner.b_on_ground:
 		print(1)
 		$AnimationTree["parameters/conditions/jump"] = true
 		owner.nr_speed_multiplier = 1.5
