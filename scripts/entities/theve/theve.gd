@@ -14,7 +14,6 @@ var b_on_wall := false
 var b_on_ground := false
 
 func _process(delta):
-	print(b_on_wall)
 	tilemap_data()
 	player_movement(delta)
 
@@ -41,7 +40,6 @@ func player_movement(delta):
 func tilemap_data():
 	tiledata_1 = n_tilemap.get_cell_tile_data(1, n_tilemap.local_to_map(position))
 	if tiledata_1:
-		print(tiledata_1.get_custom_data("height"))
 		if tiledata_1.get_custom_data("height") == 1:
 			b_on_wall = true
 			b_on_ground = false
