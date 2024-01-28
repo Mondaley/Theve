@@ -1,21 +1,129 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmcvwnbjj1toi"]
+[gd_scene load_steps=14 format=3 uid="uid://bmcvwnbjj1toi"]
 
-[ext_resource type="Script" path="res://scripts/entities/theve.gd" id="1_o4fmo"]
+[ext_resource type="Script" path="res://scripts/entities/theve/theve.gd" id="1_3kav4"]
+[ext_resource type="Script" path="res://scripts/entities/theve/theve_animation.gd" id="2_6o3ds"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_jtyf1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cf3vl"]
-size = Vector2(0.95512, 0.980579)
+size = Vector2(12, 3)
+
+[sub_resource type="Animation" id="Animation_mbr0f"]
+resource_name = "jump"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"anim_jump_end"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("hitbox:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("gfk:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(0, -33), Vector2(0, -33)]
+}
+
+[sub_resource type="Animation" id="Animation_qsbbw"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gfk:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, -15.125)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0houl"]
+_data = {
+"idle": SubResource("Animation_qsbbw"),
+"jump": SubResource("Animation_mbr0f")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ty15e"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fwmex"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_eep60"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r6dw2"]
+advance_mode = 2
+advance_condition = &"jump"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8jaxj"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3muki"]
+states/idle/node = SubResource("AnimationNodeAnimation_ty15e")
+states/idle/position = Vector2(346, 100)
+states/jump/node = SubResource("AnimationNodeAnimation_fwmex")
+states/jump/position = Vector2(510, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_eep60"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_r6dw2"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_8jaxj")]
+graph_offset = Vector2(-81, -10)
 
 [node name="theve" type="CharacterBody2D"]
+z_index = 2
 collision_layer = 2
-script = ExtResource("1_o4fmo")
+script = ExtResource("1_3kav4")
 
 [node name="gfk" type="MeshInstance2D" parent="."]
-position = Vector2(0, -0.75)
-scale = Vector2(1, 2.5)
+position = Vector2(0, -15.125)
+scale = Vector2(12, 30.25)
 mesh = SubResource("QuadMesh_jtyf1")
 
 [node name="hitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0.00191808, 0)
+position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_cf3vl")
+disabled = true
+
+[node name="Animation" type="Node2D" parent="."]
+script = ExtResource("2_6o3ds")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Animation"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_0houl")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="Animation"]
+tree_root = SubResource("AnimationNodeStateMachine_3muki")
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/conditions/jump = false

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmcvwnbjj1toi"]
+
+[ext_resource type="Script" path="res://scripts/entities/theve.gd" id="1_o4fmo"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_jtyf1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf3vl"]
+size = Vector2(12, 3)
+
+[node name="theve" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_o4fmo")
+
+[node name="gfk" type="MeshInstance2D" parent="."]
+position = Vector2(0, -15.125)
+scale = Vector2(12, 30.25)
+mesh = SubResource("QuadMesh_jtyf1")
+
+[node name="hitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_cf3vl")
