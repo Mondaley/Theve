@@ -1,12 +1,12 @@
 extends CharacterBody2D
 
 
-const GRAVITY = 200
+const GRAVITY = 100
 const SPEED = 100
 var nr_speed_multiplier := 1
 
 var direction := Vector2.ZERO
-var can_jump := true
+var is_jumping := false
 
 @onready var n_tilemap = get_tree().current_scene.find_child("TileMap")
 var tiledata_1
@@ -14,25 +14,26 @@ var b_on_wall := false
 var b_on_ground := false
 
 func _process(delta):
+	
 	tilemap_data()
 	player_movement(delta)
 
-func player_movement(delta):
+
+func player_movement(_delta):
+	print(b_on_wall, " wall")
+	print(b_on_ground, " ground")
 	direction.x = Input.get_axis("move_left","move_right")
 	direction.y = Input.get_axis("move_up","move_down")
 	
-	if b_on_wall and can_jump:
+	if b_on_wall and !is_jumping:
 		velocity.x = direction.x
 		velocity.y = GRAVITY
 		velocity.x *= SPEED * nr_speed_multiplier
-#		$hitbox.disabled = true
 	elif direction:
 		velocity = Vector2(direction.x, direction.y).normalized()
 		velocity *= SPEED * nr_speed_multiplier
-#		$hitbox.disabled = false
 	else:
 		velocity = Vector2(0, 0)
-#		$hitbox.disabled = false
 		
 	
 	move_and_slide()
